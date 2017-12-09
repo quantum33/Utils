@@ -1,0 +1,61 @@
+﻿{
+  "version": "1.0.0",
+  "restore": {
+    "projectUniqueName": "C:\\Users\\Jamyz\\Documents\\sources\\dotnet\\Utils\\test\\UtilsTests\\UtilsTests.csproj",
+    "projectName": "UtilsTests",
+    "projectPath": "C:\\Users\\Jamyz\\Documents\\sources\\dotnet\\Utils\\test\\UtilsTests\\UtilsTests.csproj",
+    "outputPath": "C:\\Users\\Jamyz\\Documents\\sources\\dotnet\\Utils\\test\\UtilsTests\\obj\\",
+    "projectStyle": "PackageReference",
+    "originalTargetFrameworks": [
+      "netcoreapp2.0"
+    ],
+    "frameworks": {
+      "netcoreapp2.0": {
+        "projectReferences": {
+          "C:\\Users\\Jamyz\\Documents\\sources\\dotnet\\Utils\\src\\Utils.csproj": {
+            "projectPath": "C:\\Users\\Jamyz\\Documents\\sources\\dotnet\\Utils\\src\\Utils.csproj"
+          }
+        }
+      }
+    }
+  },
+  "frameworks": {
+    "netcoreapp2.0": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "target": "Package",
+          "version": "2.0"
+        },
+        "FluentAssertions": {
+          "target": "Package",
+          "version": "4.19.4"
+        },
+        "Microsoft.NET.Test.Sdk": {
+          "target": "Package",
+          "version": "15.3.0"
+        },
+        "MSTest.TestAdapter": {
+          "target": "Package",
+          "version": "1.1.18"
+        },
+        "MSTest.TestFramework": {
+          "target": "Package",
+          "version": "1.1.18"
+        },
+        "NUnit": {
+          "target": "Package",
+          "version": "3.9.0"
+        },
+        "NUnit3TestAdapter": {
+          "target": "Package",
+          "version": "3.9.0"
+        }
+      },
+      "imports": [
+        "net461"
+      ],
+      "assetTargetFallback": true,
+      "warn": true
+    }
+  }
+}
