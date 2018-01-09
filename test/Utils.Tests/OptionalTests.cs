@@ -52,12 +52,12 @@ namespace Utils.Tests
         [Fact]
         public void OptionalOf_Null_WhenNone()
         {
-            var result = Optional<string>.Of(() => null)
+            var shouldBeNoValue = Optional<string>.Of(() => null)
                                          .WhenSome()
                                          .WhenNone(() => "no value")
                                          .Map();
 
-            result.Should().Be("no value");
+            shouldBeNoValue.Should().Be("no value");
         }
 
         [Fact]
