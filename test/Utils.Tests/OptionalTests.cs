@@ -1,5 +1,6 @@
 using FluentAssertions;
 using System.Diagnostics;
+using Utils.Interface;
 using Xunit;
 
 namespace Utils.Tests

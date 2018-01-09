@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Utils.Interface;
 
 namespace Utils
 {
@@ -86,14 +87,5 @@ namespace Utils
             }
             return ExecuteNone();
         }
-    }
-
-    public interface IOptional<T>
-    {
-        IOptional<T> WhenSome();
-        IOptional<T> WhenSome(Func<T, bool> predicate);
-        IOptional<T> WhenSome(Action action);
-        IOptional<T> WhenNone(Func<T> func);
-        T Map();
     }
 }
