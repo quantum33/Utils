@@ -1,3 +1,4 @@
+using System;
 using FluentAssertions;
 using System.Diagnostics;
 using Utils.Interface;
@@ -52,12 +53,24 @@ namespace Utils.Tests
         [Fact]
         public void OptionalOf_Null_WhenNone()
         {
-            var shouldBeNoValue = Optional<string>.Of(() => null)
-                                         .WhenSome()
-                                         .WhenNone(() => "no value")
-                                         .Map();
+            var shouldBeNoValue = Optional<string>
+                                        .Of(() => null)
+                                        .WhenSome()
+                                        .WhenNone(() => "no value")
+                                        .Map();
 
             shouldBeNoValue.Should().Be("no value");
+        }
+        
+        [Fact]
+        public void OptionalOf_NullAndWhenNoneNotSet_DefaultT()
+        {
+            var shouldBeDefaultT = Optional<string>
+                                    .Of(() => null)
+                                    .WhenSome()
+                                    .Map();
+
+            shouldBeDefaultT.Should().Be(default(string));
         }
 
         [Fact]
@@ -109,6 +122,30 @@ namespace Utils.Tests
                                 .WhenNone(() => 138)
                                 .Map();
             shouldBe138.Should().Be(138);
+        }
+    
+        [Fact]
+        public void WhenSome_NullFunc_ThrowsArgumentNullException()
+        {
+            var assertAction = new Action(() =>
+            {
+                var option = Optional<string>
+                    .Of(() => "my value")
+                    .WhenSome(null);
+            });
+            assertAction.ShouldThrow<ArgumentNullException>();
+        }
+        
+        [Fact]
+        public void WhenNone_NullFunc_ThrowsArgumentNullException()
+        {
+            var assertAction = new Action(() =>
+            {
+                var option = Optional<string>
+                    .Of(() => "my value")
+                    .WhenNone(null);
+            });
+            assertAction.ShouldThrow<ArgumentNullException>();
         }
     }
 }
