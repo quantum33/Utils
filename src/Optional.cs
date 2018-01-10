@@ -5,11 +5,22 @@ using Utils.Interface;
 
 namespace Utils
 {
+    public static class Optional
+    {
+        public static IOptional<T> Of<T>(Func<T> func)
+            => Some(func());
+        
+        public static IOptional<T> Some<T>(T value)
+            => value == null
+                ? Optional<T>.None()
+                : new Optional<T>(new List<T> {value});
+    }
+    
     /// <summary>
     /// Implements the optional pattern
     /// </summary>
     /// <typeparam name="T">The type of the optional instance</typeparam>
-    public class Optional<T> : IOptional<T>
+    public sealed class Optional<T> : IOptional<T>
     {
         private static readonly IOptional<T> noneInstance = new Optional<T>(Enumerable.Empty<T>());
         private static Action VoidAction { get; } = () => { /* do nothing */ };
@@ -17,23 +28,17 @@ namespace Utils
         public static IOptional<T> None()
             => noneInstance;
 
-        public static IOptional<T> Some(T value)
-        {
-            return value == null
-                ? None()
-                : new Optional<T>(new List<T> { value });
-        }
-
-        public static IOptional<T> Of(Func<T> func)
-            => Optional<T>.Some(func());
-
         private List<T> Values { get; } = new List<T>();
-
-        
         private Action ExecuteSome { get; set; } = VoidAction;
         private Func<T> ExecuteNone { get; set; } = () => default(T);
 
-        private Optional(IEnumerable<T> value)
+        /// <summary>
+        /// internal constructor
+        /// </summary>
+        /// <param name="value"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        internal Optional(IEnumerable<T> value)
         {
             if (value == null) { throw new ArgumentNullException(nameof(value)); }
             if (value.Count() > 1) { throw new ArgumentException($"Collection '{nameof(value)}' contains more than one element"); }
@@ -41,8 +46,8 @@ namespace Utils
             Values = new List<T>(value);
         }
 
-        public IOptional<T> WhenSome()
-            => WhenSome(VoidAction);
+//        public IOptional<T> WhenSome()
+//            => WhenSome(VoidAction);
 
         public IOptional<T> WhenSome(Action action)
         {
@@ -84,7 +89,7 @@ namespace Utils
 
         public T Map()
             => Values.Any()
-                ?  Values.First()
+                ? Values.First()
                 : ExecuteNone();
     }
 }
