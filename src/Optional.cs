@@ -9,11 +9,11 @@ namespace Utils
     {
         public static IOptional<T> Of<T>(Func<T> func)
             => Some(func());
-        
+
         public static IOptional<T> Some<T>(T value)
             => value == null
                 ? Optional<T>.None()
-                : new Optional<T>(new List<T> {value});
+                : Optional<T>.Create(value);
     }
     
     /// <summary>
@@ -22,33 +22,42 @@ namespace Utils
     /// <typeparam name="T">The type of the optional instance</typeparam>
     public sealed class Optional<T> : IOptional<T>
     {
-        private static readonly IOptional<T> noneInstance = new Optional<T>(Enumerable.Empty<T>());
+        private static readonly IOptional<T> _noneInstance = CreateNone();
         private static Action VoidAction { get; } = () => { /* do nothing */ };
 
         public static IOptional<T> None()
-            => noneInstance;
+            => _noneInstance;
 
         private List<T> Values { get; } = new List<T>();
         private Action ExecuteSome { get; set; } = VoidAction;
         private Func<T> ExecuteNone { get; set; } = () => default(T);
 
+        private Optional()
+        {
+            // nothing to do (Values property is already set to an empty list)
+        }
+
         /// <summary>
-        /// internal constructor
+        /// private constructor
         /// </summary>
         /// <param name="value"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        internal Optional(IEnumerable<T> value)
+        private Optional(T value)
         {
-            if (value == null) { throw new ArgumentNullException(nameof(value)); }
-            if (value.Count() > 1) { throw new ArgumentException($"Collection '{nameof(value)}' contains more than one element"); }
+            //if (value == null) { throw new ArgumentNullException(nameof(value)); }
+            //if (value.Count() > 1) { throw new ArgumentException($"Collection '{nameof(value)}' contains more than one element"); }
 
-            Values = new List<T>(value);
+            Values = new List<T>{value};
         }
 
-//        public IOptional<T> WhenSome()
-//            => WhenSome(VoidAction);
-
+        private static Optional<T> CreateNone()
+            => new Optional<T>(); 
+        internal static Optional<T> Create(T value)
+            => value == null
+                ? CreateNone()
+                : new Optional<T>(value);
+        
         public IOptional<T> WhenSome(Action action)
         {
             ExecuteSome = action ?? throw new ArgumentNullException(nameof(action));
@@ -84,7 +93,7 @@ namespace Utils
         }
         private IOptional<T> WhenSome(T value, Func<T, bool> predicate)
             => predicate == null || predicate(value)
-                ? new Optional<T>(new List<T> { value })
+                ? Create(value)
                 : None();
 
         public T Map()
